@@ -6,7 +6,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const addProduct = () => {
+const AddProduct = () => {
     type NotificationType = 'success' | 'info' | 'warning' | 'error';
     const [form] = Form.useForm();
 
@@ -15,7 +15,7 @@ const addProduct = () => {
     const router = useRouter()
     const [api, contextHolder] = notification.useNotification();
 
-    const openNotificationWithIcon = (type: NotificationType, message: string) => {
+    const OpenNotificationWithIcon = (type: NotificationType, message: string) => {
         if (type == "success") {
             api[type]({
                 message: 'Success',
@@ -42,13 +42,13 @@ const addProduct = () => {
         data = await axios.post('http://localhost:5000/api/product', value)
             .then((response) => {
                 if (response.statusText == "OK") {
-                    openNotificationWithIcon('success', '')
+                    OpenNotificationWithIcon('success', '')
                     console.log(response);
                     form.resetFields();
                 }
             })
             .catch((err) => {
-                openNotificationWithIcon('error', err)
+                OpenNotificationWithIcon('error', err)
                 console.log("Error", err);
             }
             )
@@ -62,14 +62,6 @@ const addProduct = () => {
 
     return (
         <>
-            {/* {visible && (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Space direction="vertical" style={{ width: '8%' }}>
-                        <Alert message="Success" type="success" showIcon
-                        />
-                    </Space>
-                </div>
-                    )} */}
             {contextHolder}
             <main className={styles.main}>
                 <div>
@@ -118,4 +110,4 @@ const addProduct = () => {
     )
 }
 
-export default addProduct
+export default AddProduct
