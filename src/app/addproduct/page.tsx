@@ -1,5 +1,6 @@
 'use client';
 
+import { useForm } from 'antd/es/form/Form';
 import styles from './page.module.css'
 import { Button, Form, Input, Alert, Space, notification } from 'antd';
 import axios from 'axios';
@@ -8,7 +9,7 @@ import { useState } from 'react';
 
 const AddProduct = () => {
     type NotificationType = 'success' | 'info' | 'warning' | 'error';
-    const [form] = Form.useForm();
+    const [form] = useForm();
 
     const [visible, setVisible] = useState(false);
 
