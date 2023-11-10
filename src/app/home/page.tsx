@@ -99,10 +99,10 @@ const Home = () => {
               {Array.isArray(CategoriesList)
                 ? CategoriesList.map((element) => {
                   return (
-                    <div key={element.id}>
-                      <Card key={element.id} style={{ width: 132, height: 130, textAlign: "center" }}>
-                        <img src={element.icon} alt={element.title} width={50} height={50} />
-                        <h3>{element.title}</h3>
+                    <div key={element.id} style={{ width:90,maxWidth:"100%",height:90,maxHeight:"100%" }}>
+                      <Card key={element.id} style={{ width: 130, height: 130, textAlign: "center", maxHeight:"100%", maxWidth:"100%" }}>
+                        <img src={element.icon} alt='icon' width={30} height={30} />
+                        <h6>{element.title}</h6>
                       </Card>
                     </div>
                   )
@@ -114,24 +114,23 @@ const Home = () => {
               <h4>Menu</h4>
               <div style={{ borderTop: '1px solid #8c8b8b' }}></div>
             </div>
-            <div style={{ display: "flex", alignContent: "center", justifyContent: "center", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignContent: "center", flexWrap: "wrap" }}>
               {Array.isArray(product)
                 ? product.map((element) => {
                   return (
-                    <div key={element._id} style={{ margin: '1rem' }} onClick={() => handlecheckbill(element.price, element.name)}>
-                      <Card style={{ width: 150, height: 150, maxWidth: "100%", maxHeight: "100%" }}>
-                        <img src={element.img} alt="steak" width={100} height={100} />
-                        <h4 style={{ textAlign: "center" }}>{element.name}</h4>
-                        {/* <h1>{element.price}</h1> */}
-                      </Card>
+                    <div key={element._id} style={{ margin: 5, width: 113, maxWidth: '100%', height: 120 }} onClick={() => handlecheckbill(element.price, element.name)}>
+                      <div style={{ width: 150, height: 150, maxWidth: "100%", maxHeight: "100%", borderRadius:8 ,backgroundColor:"white", display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column" }}>
+                        <img src={element.img} alt="steak" width={90} height={60} style={{ maxWidth:'100%', maxHeight:'100%', marginBottom: 5 }} />
+                        <h5 className={styles.listmenu}>{element.name}</h5>
+                      </div>
                     </div>
                   )
                 })
                 : null}
             </div>
           </div>
-          <div style={{ textAlign: "center", width: 302, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
-            <h1 className={styles.sidebar}>คิดเงิน</h1>
+          <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
+            <h2 className={styles.sidebar}>คิดเงิน</h2>
             {PurchaseList.map((item, index) => {
               return (
                 <div key={index} style={{ display: "flex", justifyContent: "space-between" }}>
@@ -140,13 +139,13 @@ const Home = () => {
                 </div>
               )
             })}
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
               <span>ยอดสุทธิ</span>
               <span>{totalprice}</span>
             </div>
             {imgQR
               ? <div>
-                <img src={imgQR} alt='QRcode' style={{ width: 200, objectFit: "contain" }} />
+                <img src={imgQR} alt='QRcode' style={{ width: 100, objectFit: "contain" }} />
               </div>
               : null}
             <div>
