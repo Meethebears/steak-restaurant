@@ -53,7 +53,7 @@ const Home = () => {
       })
   }, [])
 
-  const generateQRcode = (amount: Number) => {
+  const generateQRcode = (amount: string) => {
     const value = {
       amount: amount
     }
@@ -84,7 +84,7 @@ const Home = () => {
       PurchaseList[objIndex].quantity = quantited + 1
     }
   }
-  console.log("===", PurchaseList);
+  console.log("===", totalprice);
 
 
   return (
@@ -99,10 +99,10 @@ const Home = () => {
               {Array.isArray(CategoriesList)
                 ? CategoriesList.map((element) => {
                   return (
-                    <div key={element.id} style={{ width:90,maxWidth:"100%",height:90,maxHeight:"100%" }}>
-                      <Card key={element.id} style={{ width: 130, height: 130, textAlign: "center", maxHeight:"100%", maxWidth:"100%" }}>
-                        <img src={element.icon} alt='icon' width={30} height={30} />
-                        <h6>{element.title}</h6>
+                    <div key={element.id} className={styles.wrapcategorieslist}>
+                      <Card key={element.id} className={styles.cardcategorieslist}>
+                        <img src={element.icon} alt='icon' className={styles.imgicon}/>
+                        <div className={styles.texttitle}>{element.title}</div>
                       </Card>
                     </div>
                   )
@@ -118,10 +118,10 @@ const Home = () => {
               {Array.isArray(product)
                 ? product.map((element) => {
                   return (
-                    <div key={element._id} style={{ margin: 5, width: 113, maxWidth: '100%', height: 120 }} onClick={() => handlecheckbill(element.price, element.name)}>
-                      <div style={{ width: 150, height: 150, maxWidth: "100%", maxHeight: "100%", borderRadius:8 ,backgroundColor:"white", display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column" }}>
-                        <img src={element.img} alt="steak" width={90} height={60} style={{ maxWidth:'100%', maxHeight:'100%', marginBottom: 5 }} />
-                        <h5 className={styles.listmenu}>{element.name}</h5>
+                    <div key={element._id} className={styles.wrapmenu} onClick={() => handlecheckbill(element.price, element.name)}>
+                      <div className={styles.cardmenu}>
+                        <img src={element.img} alt="steak" className={styles.imgmenu}/>
+                        <div className={styles.listmenu}>{element.name}</div>
                       </div>
                     </div>
                   )
@@ -132,16 +132,27 @@ const Home = () => {
           <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
             <h2 className={styles.sidebar}>คิดเงิน</h2>
             {PurchaseList.map((item, index) => {
-              return (
-                <div key={index} style={{ display: "flex", justifyContent: "space-between" }}>
-                  <span>{item.productname}</span>
+              if(item.quantity >= 1){
+                return( <div key={index} className={styles.purchaselist}>
+                  <div style={{ display:"flex", alignItems:"center"}}>
+                    <div style={{ margin: 1 }}>
+                    {item.productname}
+                    </div>
+                    <div className={styles.contentpurchaselist}>x</div>
+                    <div className={styles.contentpurchaselist}>
+                      {item.quantity}
+                    </div>
+                  </div>
                   <span>{item.price}</span>
                 </div>
-              )
+                )
+              }else{
+                return null
+              }
             })}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-              <span>ยอดสุทธิ</span>
-              <span>{totalprice}</span>
+              <div className={styles.textcontentsideber}>ยอดสุทธิ</div>
+              <div className={styles.textcontentsideber}>{totalprice}</div>
             </div>
             {imgQR
               ? <div>
@@ -149,7 +160,7 @@ const Home = () => {
               </div>
               : null}
             <div>
-              <Button type="primary" onClick={() => generateQRcode(totalprice)}>
+              <Button type="primary" onClick={() => generateQRcode(totalprice.toString())}>
                 สแกนจ่าย
               </Button>
             </div>
