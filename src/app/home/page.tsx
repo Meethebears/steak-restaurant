@@ -58,7 +58,7 @@ const Home = () => {
       amount: amount
     }
     return (
-      axios.post('http://localhost:5000/api/generateQRcode', value)
+      axios.post('https://node-api-steak-restaurant.vercel.app/api/generateQRcode', value)
         .then((respones) => {
           setImgQR(respones?.data?.Result);
         })
