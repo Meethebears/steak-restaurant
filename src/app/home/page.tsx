@@ -84,7 +84,19 @@ const Home = () => {
       PurchaseList[objIndex].quantity = quantited + 1
     }
   }
-  console.log("===", totalprice);
+  const reset = () => {
+    return(
+      setPurchaseList([
+        {
+          productname: "",
+          price: '',
+          quantity: 0
+        }
+      ]),
+      setTotalPrice(0),
+      setImgQR("")
+    )
+  }
 
 
   return (
@@ -101,7 +113,7 @@ const Home = () => {
                   return (
                     <div key={element.id} className={styles.wrapcategorieslist}>
                       <Card key={element.id} className={styles.cardcategorieslist}>
-                        <img src={element.icon} alt='icon' className={styles.imgicon}/>
+                        <img src={element.icon} alt='icon' className={styles.imgicon} />
                         <div className={styles.texttitle}>{element.title}</div>
                       </Card>
                     </div>
@@ -120,7 +132,7 @@ const Home = () => {
                   return (
                     <div key={element._id} className={styles.wrapmenu} onClick={() => handlecheckbill(element.price, element.name)}>
                       <div className={styles.cardmenu}>
-                        <img src={element.img} alt="steak" className={styles.imgmenu}/>
+                        <img src={element.img} alt="steak" className={styles.imgmenu} />
                         <div className={styles.listmenu}>{element.name}</div>
                       </div>
                     </div>
@@ -132,11 +144,11 @@ const Home = () => {
           <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
             <h2 className={styles.sidebar}>คิดเงิน</h2>
             {PurchaseList.map((item, index) => {
-              if(item.quantity >= 1){
-                return( <div key={index} className={styles.purchaselist}>
-                  <div style={{ display:"flex", alignItems:"center"}}>
+              if (item.quantity >= 1) {
+                return (<div key={index} className={styles.purchaselist}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     <div style={{ margin: 1 }}>
-                    {item.productname}
+                      {item.productname}
                     </div>
                     <div className={styles.contentpurchaselist}>x</div>
                     <div className={styles.contentpurchaselist}>
@@ -146,7 +158,7 @@ const Home = () => {
                   <span>{item.price}</span>
                 </div>
                 )
-              }else{
+              } else {
                 return null
               }
             })}
@@ -162,6 +174,9 @@ const Home = () => {
             <div>
               <Button type="primary" onClick={() => generateQRcode(totalprice.toString())}>
                 สแกนจ่าย
+              </Button>
+              <Button style={{ color: "white", backgroundColor: "green", textAlign:"center" }} onClick={() => reset()}>
+                จ่ายเงินสำเร็จ
               </Button>
             </div>
           </div>
