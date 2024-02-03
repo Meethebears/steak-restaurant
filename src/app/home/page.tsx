@@ -10,6 +10,7 @@ const Home = () => {
   const [product, setProduct] = useState("")
   const [imgQR, setImgQR] = useState("")
   const [totalprice, setTotalPrice] = useState(0)
+  const [tableNumber, setTableNumber] = useState("")
   const [PurchaseList, setPurchaseList] = useState<{ productname: string; price: string; quantity: number }[]>(
     [],
   );
@@ -61,7 +62,7 @@ const Home = () => {
     return (
       axios.post('http://localhost:5000/api/generateQRcode', value)
         .then((respones) => {
-          setImgQR(respones?.data?.Result);
+          setImgQR(respones.data.Result);
         })
         .catch((err) => {
           console.log("Error ", err);
@@ -87,10 +88,10 @@ const Home = () => {
   };
 
   const onFinish = async () => {
-    console.log(PurchaseList);
 
     const values = {
-      order: PurchaseList
+      order: PurchaseList,
+      tablenumber: tableNumber
     }
 
     let data;
@@ -99,6 +100,10 @@ const Home = () => {
         if (response.statusText == "OK") {
           OpenNotificationWithIcon('success', '')
           console.log(response.data);
+          setPurchaseList([]),
+            setTotalPrice(0),
+            setImgQR("")
+          setTableNumber("")
         }
       })
       .catch((err) => {
@@ -121,7 +126,6 @@ const Home = () => {
         price: price.toString(),
         quantity: 1
       }])
-      // setPurchaseList(PurchaseList)
     } else {
       const quantited = PurchaseList[objIndex].quantity
       PurchaseList[objIndex].quantity = quantited + 1
@@ -175,12 +179,11 @@ const Home = () => {
     setModalTable(false);
   };
 
-
   return (
     <>
-      <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh', width: "" }}>
+      <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh' }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <div style={{ width: 1082, maxWidth: "100%", backgroundColor: "rgb(203 203 203)", borderRadius: 15, padding: 25 }}>
+          <div style={{ width: 1013, maxWidth: "100%", backgroundColor: "rgb(203 203 203)", borderRadius: 15, padding: 25, marginLeft:"auto" }}>
             <div style={{ marginBottom: 15 }}>
               <h3>Categories</h3>
             </div>
@@ -220,6 +223,7 @@ const Home = () => {
           </div>
           <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
             <h2 className={styles.sidebar}>คิดเงิน</h2>
+            <Divider/>
             {PurchaseList.map((item, index) => (
               <div key={index} className={styles.purchaselist}>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -239,13 +243,16 @@ const Home = () => {
                 </div>
               </div>
             ))}
+
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
               <div className={styles.textcontentsideber}>ยอดสุทธิ</div>
               <div className={styles.textcontentsideber}>{totalprice}</div>
             </div>
-            <Button style={{ color: "white", backgroundColor: "green", textAlign: "center" }} onClick={showmodal}>
-              เลือกโต๊ะ
-            </Button>
+            {totalprice
+              ? <Button style={{ color: "white", backgroundColor: "green", textAlign: "center" }} onClick={showmodal}>
+                เลือกโต๊ะ
+              </Button>
+              : null}
             {imgQR
               ? <div>
                 <img src={imgQR} alt='QRcode' style={{ width: 100, objectFit: "contain" }} />
@@ -255,7 +262,7 @@ const Home = () => {
               <Button type="primary" onClick={() => generateQRcode(totalprice.toString())}>
                 สแกนจ่าย
               </Button>
-              <Button style={{ color: "white", backgroundColor: "green", textAlign: "center" }} onClick={() => reset()}>
+              <Button type='primary' disabled={tableNumber ? false : true} style={tableNumber ? { color: "white", backgroundColor: "green", textAlign: "center" } : {}} onClick={() => onFinish()}>
                 จ่ายเงินสำเร็จ
               </Button>
             </div>
@@ -263,7 +270,7 @@ const Home = () => {
           </div>
         </div>
       </main>
-      <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel}/>
+      <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel} setTableNumber={setTableNumber} />
     </>
   )
 }
