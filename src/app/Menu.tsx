@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     AppstoreOutlined,
     ContainerOutlined,
@@ -14,7 +14,7 @@ import {
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -54,9 +54,31 @@ const items: MenuItem[] = [
     // ]),
 ];
 
-const Navbar = () => {
+const Navbar = (props : any) => {
     const router = useRouter()
-    const [collapsed, setCollapsed] = useState(false)
+    const pathname = usePathname()
+    const [collapsed, setCollapsed] = useState(true)
+    const [pagekey, setPageKey] = useState({})
+
+    useEffect(() => {
+        const CheckUrl = () => {
+            switch (pathname) {
+                case "/home":
+                    setPageKey("1")
+                    break;
+                case "/addproduct":
+                    setPageKey("2")
+                    break;
+                case "/dashboard":
+                    setPageKey("3")
+                    break;
+            }
+        }
+
+        CheckUrl()
+
+    }, [pathname]);
+
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
@@ -79,8 +101,8 @@ const Navbar = () => {
 
     }
 
-
-
+    console.log(props.keys);
+    
 
     return (
         <div style={{ width: 256, position: "fixed", zIndex: "2" }}>
@@ -88,8 +110,7 @@ const Navbar = () => {
                 {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </Button>
             <Menu
-                defaultSelectedKeys={['1']}
-                defaultOpenKeys={['sub1']}
+                defaultSelectedKeys={props.keys}
                 mode="inline"
                 theme="dark"
                 inlineCollapsed={collapsed}

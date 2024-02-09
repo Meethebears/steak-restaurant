@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: 'developer',
 }
 
+
+
 export default function RootLayout({
   children,
 }: {
@@ -18,9 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Menu/>
+        {/* <Menu/> */}
         {children}
       </body>
+      
     </html>
   )
 }

@@ -1,9 +1,13 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
-import { Button, Card, Divider, notification, Modal } from "antd"
+import { Button, Card, Divider, notification, Modal, Spin } from "antd"
 import styles from './page.module.css'
 import ModalChangeTable from './modal/ChangeTable'
+import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
+import Menu from "../Menu"
+
 
 const Home = () => {
 
@@ -15,6 +19,7 @@ const Home = () => {
     [],
   );
   const [modalTable, setModalTable] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [api, contextHolder] = notification.useNotification();
 
   type NotificationType = 'success' | 'info' | 'warning' | 'error';
@@ -47,6 +52,8 @@ const Home = () => {
     }
   ]
 
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/product')
@@ -172,18 +179,51 @@ const Home = () => {
   const showmodal = () => {
     setModalTable(true)
   };
-  const handleOk = () => {
+
+  const handleOk = async () => {
+    const values = {
+      order: PurchaseList,
+      tablenumber: tableNumber
+    }
+    let data
+    data = await axios.post('http://localhost:5000/api/sale_items', values)
+      .then((response) => {
+        if (response.statusText == "OK") {
+          OpenNotificationWithIcon('success', '')
+          console.log(response.data);
+          setPurchaseList([]),
+          setTotalPrice(0),
+          setImgQR("")
+          setTableNumber("")
+          setLoading(true)
+          setTimeout(() => {
+            setLoading(false)
+          }, 5000)
+          setTimeout(() => {
+            router.push("/dashboard")
+          }, 3000)
+        }
+      })
+      .catch((err) => {
+        OpenNotificationWithIcon('error', err)
+        console.log("Error", err);
+      }
+      )
+
     setModalTable(false);
   };
+
   const handleCancel = () => {
     setModalTable(false);
   };
 
   return (
     <>
-      <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh' }}>
+    {pathname == "/home" ? <Menu keys={"1"} /> : null}
+    <Spin spinning={loading}>
+      <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh', marginLeft: "30px" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <div style={{ width: 1013, maxWidth: "100%", backgroundColor: "rgb(203 203 203)", borderRadius: 15, padding: 25, marginLeft:"auto" }}>
+          <div style={{ width: 1013, maxWidth: "100%", backgroundColor: "rgb(203 203 203)", borderRadius: 15, padding: 25, marginLeft: "auto" }}>
             <div style={{ marginBottom: 15 }}>
               <h3>Categories</h3>
             </div>
@@ -223,7 +263,7 @@ const Home = () => {
           </div>
           <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
             <h2 className={styles.sidebar}>คิดเงิน</h2>
-            <Divider/>
+            <Divider />
             {PurchaseList.map((item, index) => (
               <div key={index} className={styles.purchaselist}>
                 <div style={{ display: "flex", alignItems: "center" }}>
@@ -258,12 +298,12 @@ const Home = () => {
                 <img src={imgQR} alt='QRcode' style={{ width: 100, objectFit: "contain" }} />
               </div>
               : null}
-            {totalprice !== 0 ? <div>
-              <Button type="primary" onClick={() => generateQRcode(totalprice.toString())}>
+            {totalprice !== 0 ? <div style={{ marginTop: 5 }}>
+              <Button type="primary" onClick={() => generateQRcode(totalprice.toString())} style={{ marginRight: 15, marginLeft: 30 }}>
                 สแกนจ่าย
               </Button>
               <Button type='primary' disabled={tableNumber ? false : true} style={tableNumber ? { color: "white", backgroundColor: "green", textAlign: "center" } : {}} onClick={() => onFinish()}>
-                จ่ายเงินสำเร็จ
+                จ่ายเงิน
               </Button>
             </div>
               : null}
@@ -271,6 +311,7 @@ const Home = () => {
         </div>
       </main>
       <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel} setTableNumber={setTableNumber} />
+      </Spin>
     </>
   )
 }
