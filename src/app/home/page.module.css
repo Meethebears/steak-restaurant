@@ -91,6 +91,10 @@
   font-family: '';
 }
 
+.btn {
+  color: aqua;
+}
+
 .main {
   display: flex;
   flex-direction: column;

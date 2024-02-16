@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { Button, Card, Divider, notification, Modal, Spin } from "antd"
 import styles from './page.module.css'
+import './style.css'
 import ModalChangeTable from './modal/ChangeTable'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import Menu from "../Menu"
-
 
 const Home = () => {
 
@@ -21,6 +21,7 @@ const Home = () => {
   const [modalTable, setModalTable] = useState(false)
   const [loading, setLoading] = useState(false)
   const [api, contextHolder] = notification.useNotification();
+  const [active, setActive] = useState("1")
 
   type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -192,8 +193,8 @@ const Home = () => {
           OpenNotificationWithIcon('success', '')
           console.log(response.data);
           setPurchaseList([]),
-          setTotalPrice(0),
-          setImgQR("")
+            setTotalPrice(0),
+            setImgQR("")
           setTableNumber("")
           setLoading(true)
           setTimeout(() => {
@@ -217,88 +218,99 @@ const Home = () => {
     setModalTable(false);
   };
 
+  const handleClick = (event: any) => {
+    setActive(event.target.id);
+  }
+
+  console.log(PurchaseList);
+  
+
   return (
     <>
-    {pathname == "/home" ? <Menu keys={"1"} /> : null}
-    <Spin spinning={loading}>
-      <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh', marginLeft: "30px" }}>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <div style={{ width: 1013, maxWidth: "100%", backgroundColor: "rgb(203 203 203)", borderRadius: 15, padding: 25, marginLeft: "auto" }}>
-            <div style={{ marginBottom: 15 }}>
-              <h3>Categories</h3>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
-              {Array.isArray(CategoriesList)
-                ? CategoriesList.map((element) => {
-                  return (
-                    <div key={element.id} className={styles.wrapcategorieslist} onClick={() => (handleSelectProductType(element.title))}>
-                      <Card key={element.id} className={styles.cardcategorieslist}>
-                        <img src={element.icon} alt='icon' className={styles.imgicon} />
-                        <div className={styles.texttitle}>{element.title}</div>
-                      </Card>
-                    </div>
-                  )
-                })
-                : null}
-            </div>
-            <Divider />
-            <div style={{ display: "flex" }}>
-              <h4>Menu</h4>
-              <div style={{ borderTop: '1px solid #8c8b8b' }}></div>
-            </div>
-            <div style={{ display: "flex", alignContent: "center", flexWrap: "wrap", cursor: "pointer" }}>
-              {Array.isArray(product)
-                ? product.map((element) => {
-                  return (
-                    <div key={element._id} className={styles.wrapmenu} onClick={() => handlecheckbill(element.price, element.name)}>
-                      <div className={styles.cardmenu}>
-                        <img src={element.img} alt="steak" className={styles.imgmenu} />
-                        <div className={styles.listmenu}>{element.name}</div>
-                      </div>
-                    </div>
-                  )
-                })
-                : null}
-            </div>
-          </div>
-          <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
-            <h2 className={styles.sidebar}>คิดเงิน</h2>
-            <Divider />
-            {PurchaseList.map((item, index) => (
-              <div key={index} className={styles.purchaselist}>
-                <div style={{ display: "flex", alignItems: "center" }}>
-                  <div style={{ margin: 1 }}>
-                    {item.productname}
-                  </div>
-                  <div className={styles.contentpurchaselist}>x</div>
-                  <div className={styles.contentpurchaselist}>
-                    {item.quantity}
-                  </div>
-                </div>
-                <span>{item.price}</span>
-                <div>
-                  <Button type="text" danger size='small' onClick={() => handledelete(index, Number(item.price), Number(item.quantity))}>
-                    X
-                  </Button>
-                </div>
+      {pathname == "/home" ? <Menu keys={"1"} /> : null}
+      <Spin spinning={loading}>
+        <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh', marginLeft: "30px" }}>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <div style={{ width: 1013, maxWidth: "100%", backgroundColor: "rgb(203 203 203)", borderRadius: 15, padding: 25, marginLeft: "auto" }}>
+              <div style={{ marginBottom: 15 }}>
+                <h3>Categories</h3>
               </div>
-            ))}
-
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-              <div className={styles.textcontentsideber}>ยอดสุทธิ</div>
-              <div className={styles.textcontentsideber}>{totalprice}</div>
+              <div style={{ display: "flex", justifyContent: "space-between", cursor: "pointer" }}>
+                {Array.isArray(CategoriesList)
+                  ? CategoriesList.map((element) => {
+                    return (
+                      <div key={element.id} className={styles.wrapcategorieslist} onClick={() => (handleSelectProductType(element.title))}>
+                        <Card key={element.id} className={styles.cardcategorieslist}>
+                          <img src={element.icon} alt='icon' className={styles.imgicon} />
+                          <div className={styles.texttitle}>{element.title}</div>
+                        </Card>
+                      </div>
+                    )
+                  })
+                  : null}
+              </div>
+              <Divider />
+              <div style={{ display: "flex" }}>
+                <h4>Menu</h4>
+                <div style={{ borderTop: '1px solid #8c8b8b' }}></div>
+              </div>
+              <div style={{ display: "flex", alignContent: "center", flexWrap: "wrap", cursor: "pointer" }}>
+                {Array.isArray(product)
+                  ? product.map((element) => {
+                    return (
+                      <div key={element._id} className={styles.wrapmenu} onClick={() => handlecheckbill(element.price, element.name)}>
+                        <div className={styles.cardmenu}>
+                          <img src={element.img} alt="steak" className={styles.imgmenu} />
+                          <div className={styles.listmenu}>{element.name}</div>
+                        </div>
+                      </div>
+                    )
+                  })
+                  : null}
+              </div>
             </div>
-            {totalprice
+            <div style={{ textAlign: "center", width: 350, maxWidth: "100%", borderRadius: 15, padding: 25, backgroundColor: "#FFFFFF", marginLeft: 10 }}>
+              <h2 className={styles.sidebar}>คิดเงิน</h2>
+              <Divider />
+              {PurchaseList.map((item, index) => (
+                <div key={index} className={styles.purchaselist}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div style={{ margin: 1 }}>
+                      {item.productname}
+                    </div>
+                    <div className={styles.contentpurchaselist}>x</div>
+                    <div className={styles.contentpurchaselist}>
+                      {item.quantity}
+                    </div>
+                  </div>
+                  <span>{item.price}</span>
+                  <div>
+                    <Button type="text" danger size='small' onClick={() => handledelete(index, Number(item.price), Number(item.quantity))}>
+                      X
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              {totalprice ? <Divider dashed /> : null}
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                {totalprice ? 
+                <>
+                <div className={styles.textcontentsideber}>ยอดสุทธิ</div>
+                <div className={styles.textcontentsideber}>{totalprice}</div>
+                </>
+                :null}
+              </div>
+              {/* {totalprice
               ? <Button style={{ color: "white", backgroundColor: "green", textAlign: "center" }} onClick={showmodal}>
                 เลือกโต๊ะ
               </Button>
-              : null}
-            {imgQR
+              : null} */}
+              {/* {imgQR
               ? <div>
                 <img src={imgQR} alt='QRcode' style={{ width: 100, objectFit: "contain" }} />
               </div>
-              : null}
-            {totalprice !== 0 ? <div style={{ marginTop: 5 }}>
+              : null} */}
+              {/* {totalprice !== 0 ? <div style={{ marginTop: 5 }}>
               <Button type="primary" onClick={() => generateQRcode(totalprice.toString())} style={{ marginRight: 15, marginLeft: 30 }}>
                 สแกนจ่าย
               </Button>
@@ -306,11 +318,35 @@ const Home = () => {
                 จ่ายเงิน
               </Button>
             </div>
-              : null}
+              : null} */}
+              <div>
+                <h3>Payment Method</h3>
+                <div style={{ display:"flex", justifyContent:"space-around" }}>
+                  <div className={active === "1" ? "active" : ''} key={1} id={'1'} onClick={handleClick} style={{ width:85, height:78, paddingTop:13, marginTop:20 }}>
+                    <button
+                      key={1}
+                      className={active === "1" ? "active" : ''}
+                      id={'1'}
+                      onClick={handleClick}
+                      style={active === "2"?{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }:{backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%'}}
+                    />
+                  </div>
+                  <div className={active === "2" ? "active" : ''} key={2} id={'2'} onClick={handleClick} style={{ width:85, height:78, paddingTop:13, marginTop:20 }}>
+                    <button
+                      key={2}
+                      className={active === "2" ? "active" : ''}
+                      id={'2'}
+                      onClick={handleClick}
+                      style={{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundColor: "rgb(202 217 252)", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 }}
+                    />
+                  </div>
+                </div>
+                <Button style={{ marginTop: 10 }}>Payment</Button>
+              </div>
+            </div>
           </div>
-        </div>
-      </main>
-      <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel} setTableNumber={setTableNumber} />
+        </main>
+        <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel} setTableNumber={setTableNumber} />
       </Spin>
     </>
   )
