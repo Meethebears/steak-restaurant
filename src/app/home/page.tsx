@@ -328,7 +328,7 @@ const Home = () => {
                       className={active === "1" ? "active" : ''}
                       id={'1'}
                       onClick={handleClick}
-                      style={active === "2"?{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }:{backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%'}}
+                      style={active === "2"?{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', filter:"grayscale(1)" ,backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }:{backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%'}}
                     />
                   </div>
                   <div className={active === "2" ? "active" : ''} key={2} id={'2'} onClick={handleClick} style={{ width:85, height:78, paddingTop:13, marginTop:20 }}>
@@ -337,7 +337,7 @@ const Home = () => {
                       className={active === "2" ? "active" : ''}
                       id={'2'}
                       onClick={handleClick}
-                      style={{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundColor: "rgb(202 217 252)", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 }}
+                      style={active === "1"?{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', filter:"grayscale(1)" ,backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 }:{backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%'}}
                     />
                   </div>
                 </div>
