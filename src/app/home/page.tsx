@@ -222,7 +222,10 @@ const Home = () => {
     setActive(event.target.id);
   }
 
-  console.log(PurchaseList);
+  const handlePayment = () => {
+    console.log("KEY",active);
+    
+  }
   
 
   return (
@@ -341,7 +344,7 @@ const Home = () => {
                     />
                   </div>
                 </div>
-                <Button style={{ marginTop: 10 }}>Payment</Button>
+                <Button style={{ marginTop: 10 }} onClick={handlePayment}>Payment</Button>
               </div>
             </div>
           </div>
