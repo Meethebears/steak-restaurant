@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios'
 import { Button, Card, Divider, notification, Modal, Spin } from "antd"
 import styles from './page.module.css'
 import './style.css'
-import ModalChangeTable from './modal/ChangeTable'
+import ModalChangeTable from '../Modal/ChangeTable'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import Menu from "../Menu"
@@ -62,6 +62,7 @@ const Home = () => {
         setProduct(response.data)
       })
   }, [])
+
 
   const generateQRcode = (amount: string) => {
     const value = {
@@ -223,10 +224,15 @@ const Home = () => {
   }
 
   const handlePayment = () => {
-    console.log("KEY",active);
-    
+    if (active === "2") {
+      generateQRcode(totalprice.toString())
+    }
+    else {
+      onFinish();
+    }
+
   }
-  
+
 
   return (
     <>
@@ -277,7 +283,7 @@ const Home = () => {
               <Divider />
               {PurchaseList.map((item, index) => (
                 <div key={index} className={styles.purchaselist}>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div style={{ display:"flex", alignItems:"center" }}>
                     <div style={{ margin: 1 }}>
                       {item.productname}
                     </div>
@@ -286,22 +292,24 @@ const Home = () => {
                       {item.quantity}
                     </div>
                   </div>
-                  <span>{item.price}</span>
-                  <div>
-                    <Button type="text" danger size='small' onClick={() => handledelete(index, Number(item.price), Number(item.quantity))}>
-                      X
-                    </Button>
+                  <div style={{ display:"flex", alignItems:"center" }}>
+                    <span>{item.price}</span>
+                    <div>
+                      <Button type="text" danger size='small' onClick={() => handledelete(index, Number(item.price), Number(item.quantity))}>
+                        X
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
               {totalprice ? <Divider dashed /> : null}
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
-                {totalprice ? 
-                <>
-                <div className={styles.textcontentsideber}>ยอดสุทธิ</div>
-                <div className={styles.textcontentsideber}>{totalprice}</div>
-                </>
-                :null}
+              <div style={{ display: "flex", justifyContent: "space-around", marginBottom: 10 }}>
+                {totalprice ?
+                  <>
+                    <div className={styles.textcontentsideber}>ยอดสุทธิ</div>
+                    <div className={styles.textcontentsideber}>{totalprice}</div>
+                  </>
+                  : null}
               </div>
               {/* {totalprice
               ? <Button style={{ color: "white", backgroundColor: "green", textAlign: "center" }} onClick={showmodal}>
@@ -322,30 +330,40 @@ const Home = () => {
               </Button>
             </div>
               : null} */}
-              <div>
+              {imgQR
+                ? <div>
+                  <img src={imgQR} alt='QRcode' style={{ width: 100, objectFit: "contain" }} />
+                </div>
+                : null}
+              {totalprice
+                ? <Button style={{ color: "white", backgroundColor: "green", textAlign: "center" }} onClick={showmodal}>
+                  เลือกโต๊ะ
+                </Button>
+                : null}
+              {/* <div>
                 <h3>Payment Method</h3>
-                <div style={{ display:"flex", justifyContent:"space-around" }}>
-                  <div className={active === "1" ? "active" : ''} key={1} id={'1'} onClick={handleClick} style={{ width:85, height:78, paddingTop:13, marginTop:20 }}>
+                <div style={{ display: "flex", justifyContent: "space-around" }}>
+                  <div className={active === "1" ? "active" : ''} key={1} id={'1'} onClick={handleClick} style={{ width: 85, height: 78, paddingTop: 13, marginTop: 20 }}>
                     <button
                       key={1}
                       className={active === "1" ? "active" : ''}
                       id={'1'}
                       onClick={handleClick}
-                      style={active === "2"?{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', filter:"grayscale(1)" ,backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }:{backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%'}}
+                      style={active === "2" ? { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', filter: "grayscale(1)", backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' } : { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }}
                     />
                   </div>
-                  <div className={active === "2" ? "active" : ''} key={2} id={'2'} onClick={handleClick} style={{ width:85, height:78, paddingTop:13, marginTop:20 }}>
+                  <div className={active === "2" ? "active" : ''} key={2} id={'2'} onClick={handleClick} style={{ width: 85, height: 78, paddingTop: 13, marginTop: 20 }}>
                     <button
                       key={2}
                       className={active === "2" ? "active" : ''}
                       id={'2'}
                       onClick={handleClick}
-                      style={active === "1"?{ backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', filter:"grayscale(1)" ,backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 }:{backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%'}}
+                      style={active === "1" ? { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', filter: "grayscale(1)", backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 } : { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }}
                     />
                   </div>
                 </div>
                 <Button style={{ marginTop: 10 }} onClick={handlePayment}>Payment</Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </main>

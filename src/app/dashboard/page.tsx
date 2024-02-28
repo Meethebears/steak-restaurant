@@ -1,12 +1,16 @@
 'use client';
 
-import { Card, Divider } from 'antd';
+import { Card, Divider, Space } from 'antd';
 import Menu from '../Menu'
 import { useRouter, usePathname } from 'next/navigation'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
+import axios from 'axios'
+import ModalCheckBill from '../Modal/CheckBill';
 
 const Dashboard = () => {
+
+    const [saleProduct, setSaleProduct] = useState("")
 
     const router = useRouter()
     const pathname = usePathname()
@@ -17,6 +21,17 @@ const Dashboard = () => {
         { id: 2, value: 20, label: 'series C' },
     ];
 
+    useEffect(() => {
+        axios.get('http://localhost:5000/api/sale_items')
+            .then(response => {
+                setSaleProduct(response.data)
+            })
+    }, [])
+
+    const Payment = (id: string) => {
+        router.push(`/home/${id}`)
+    }
+    
 
     return (
         <>
@@ -36,25 +51,37 @@ const Dashboard = () => {
                 <h2>Table status</h2>
                 <Divider />
                 <div style={{ display: "flex", justifyContent: "space-around" }}>
-                    <Card>
-                        <div>โต๊ะที่ 1</div>
-                        <Divider />
-                        <div>รายการอาหาร</div>
-                    </Card>
-                    <Card>
-                        <div>โต๊ะที่ 2</div>
-                        <Divider />
-                        <div>รายการอาหาร</div>
-                    </Card>
-                    <Card>
-                        <div>โต๊ะที่ 3</div>
-                        <Divider />
-                        <div>รายการอาหาร</div>
-                    </Card>
+                    {Array.isArray(saleProduct) ? saleProduct.map((item) => {
+                        return (
+                            <Card style={{ width: 185, fontFamily: 'Mitr, sans-serif', cursor: "pointer" }} onClick={() => Payment(item._id)}>
+                                <div style={{ display: "flex", flexDirection: "column" }}>
+                                    <div style={{ fontSize: 20, fontWeight: 1000 }}>{item.tablenumber}</div>
+                                    <Divider />
+                                    <div style={{ fontSize: 16, fontWeight: 600 }}>รายการอาหาร</div>
+                                    <div>{(item.order).map((element: string) => {
+                                        return (
+                                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                <div style={{ display: "flex" }}>{element.productname}
+                                                    <div style={{ color: "#C6C6D1" }}> x{element.quantity}</div>
+                                                </div>
+                                                <div>{element.price}</div>
+                                            </div>
+                                        )
+                                    })}
+                                        <Divider />
+                                    </div>
+                                    <div>ยอดสุทธิ {item.totalprice}</div>
+
+                                </div>
+                            </Card>
+                        )
+                    })
+                        : null
+                    }
                 </div>
                 <Divider />
                 <Card style={{ width: 400 }}
-                title={'Top selling'}>
+                    title={'Top selling'}>
                     <PieChart
                         series={[
                             {

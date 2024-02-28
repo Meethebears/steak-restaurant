@@ -101,9 +101,6 @@ const Navbar = (props : any) => {
 
     }
 
-    console.log(props.keys);
-    
-
     return (
         <div style={{ width: 256, position: "fixed", zIndex: "2" }}>
             <Button type="primary" onClick={toggleCollapsed} style={{ marginBottom: 16 }}>
