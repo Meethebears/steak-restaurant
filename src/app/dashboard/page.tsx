@@ -6,12 +6,13 @@ import { useRouter, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import { PieChart } from '@mui/x-charts/PieChart';
 import axios from 'axios'
-import ModalCheckBill from '../Modal/CheckBill';
+import Menubar from '@/app/Menu'
+
 
 const Dashboard = () => {
 
     const [saleProduct, setSaleProduct] = useState("")
-
+    const loadingPage = <Menubar/>
     const router = useRouter()
     const pathname = usePathname()
 
@@ -31,7 +32,6 @@ const Dashboard = () => {
     const Payment = (id: string) => {
         router.push(`/home/${id}`)
     }
-    
 
     return (
         <>
@@ -52,29 +52,27 @@ const Dashboard = () => {
                 <Divider />
                 <div style={{ display: "flex", justifyContent: "space-around" }}>
                     {Array.isArray(saleProduct) ? saleProduct.map((item) => {
-                        return (
-                            <Card style={{ width: 185, fontFamily: 'Mitr, sans-serif', cursor: "pointer" }} onClick={() => Payment(item._id)}>
-                                <div style={{ display: "flex", flexDirection: "column" }}>
-                                    <div style={{ fontSize: 20, fontWeight: 1000 }}>{item.tablenumber}</div>
-                                    <Divider />
-                                    <div style={{ fontSize: 16, fontWeight: 600 }}>รายการอาหาร</div>
-                                    <div>{(item.order).map((element: string) => {
-                                        return (
-                                            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                <div style={{ display: "flex" }}>{element.productname}
-                                                    <div style={{ color: "#C6C6D1" }}> x{element.quantity}</div>
-                                                </div>
-                                                <div>{element.price}</div>
-                                            </div>
-                                        )
-                                    })}
-                                        <Divider />
+                        return (item.payment === "not paid" ? <Card style={{ width: 185, fontFamily: 'Mitr, sans-serif', cursor: "pointer" }} onClick={() => Payment(item._id)}>
+                        <div style={{ display: "flex", flexDirection: "column" }}>
+                            <div style={{ fontSize: 20, fontWeight: 1000 }}>{item.tablenumber}</div>
+                            <Divider />
+                            <div style={{ fontSize: 16, fontWeight: 600 }}>รายการอาหาร</div>
+                            <div>{(item.order).map((element: any) => {
+                                return (
+                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                        <div style={{ display: "flex" }}>{element.productname}
+                                            <div style={{ color: "#C6C6D1" }}> x{element.quantity}</div>
+                                        </div>
+                                        <div>{element.price}</div>
                                     </div>
-                                    <div>ยอดสุทธิ {item.totalprice}</div>
+                                )
+                            })}
+                                <Divider />
+                            </div>
+                            <div>ยอดสุทธิ {item.totalprice}</div>
 
-                                </div>
-                            </Card>
-                        )
+                        </div>
+                    </Card> : null)
                     })
                         : null
                     }

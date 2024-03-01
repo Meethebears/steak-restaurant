@@ -58,26 +58,28 @@ const Navbar = (props : any) => {
     const router = useRouter()
     const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(true)
-    const [pagekey, setPageKey] = useState({})
 
-    useEffect(() => {
-        const CheckUrl = () => {
-            switch (pathname) {
-                case "/home":
-                    setPageKey("1")
-                    break;
-                case "/addproduct":
-                    setPageKey("2")
-                    break;
-                case "/dashboard":
-                    setPageKey("3")
-                    break;
-            }
-        }
+    const {keys} = props
 
-        CheckUrl()
+    // useEffect(() => {
+    //     const CheckUrl = () => {
+    //         switch (pathname) {
+    //             case "/home":
+    //                 setPageKey("1")
+    //                 break;
+    //             case "/addproduct":
+    //                 setPageKey("2")
+    //                 break;
+    //             case "/dashboard":
+    //                 setPageKey("3")
+    //                 break;
+    //         }
+    //     }
 
-    }, [pathname]);
+    //     CheckUrl()
+
+    // }, [pathname]);
+    
 
 
     const toggleCollapsed = () => {
@@ -107,7 +109,7 @@ const Navbar = (props : any) => {
                 {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </Button>
             <Menu
-                defaultSelectedKeys={props.keys}
+                defaultSelectedKeys={keys}
                 mode="inline"
                 theme="dark"
                 inlineCollapsed={collapsed}

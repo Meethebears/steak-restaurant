@@ -236,7 +236,7 @@ const Home = () => {
 
   return (
     <>
-      {pathname == "/home" ? <Menu keys={"1"} /> : null}
+      {pathname == "/home" ? <Menu keys={"1"}/> : null}
       <Spin spinning={loading}>
         <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh', marginLeft: "30px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
