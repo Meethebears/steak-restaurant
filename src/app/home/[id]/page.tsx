@@ -60,12 +60,12 @@ const HomeID = ({ params }: { params: { id: string } }) => {
     axios.get(`http://localhost:5000/api/sale_items/${params.id}`)
       .then(response => {
         setDataByID(response.data)
-        setPurchaseList(response.data.map((item:any) => (item.order))[0])
+        setPurchaseList(response.data.map((item: any) => (item.order))[0])
         setTotalPrice(response.data.map((item: any) => (item.totalprice))[0])
         setTableNumber(response.data.map((item: any) => (item.tablenumber)))
       })
   }, [])
-  
+
   useEffect(() => {
     axios.get('http://localhost:5000/api/product')
       .then(response => {
@@ -92,28 +92,23 @@ const HomeID = ({ params }: { params: { id: string } }) => {
 
   const onFinish = async () => {
 
-    // let orders = Array.from(DataByID).map(element => (element.order))
-
-    // console.log("order",PurchaseList);
-    
-
     const values = {
       order: PurchaseList,
       tablenumber: tableNumber[0],
-      totalprice:totalprice,
-      payment:"paid"
+      totalprice: totalprice,
+      payment: "paid"
     }
 
     let data;
     data = await axios.put(`http://localhost:5000/api/sale_items/${params.id}`, values)
       .then((response) => {
-        if (response.statusText == "OK") {
+        if (response) {
           console.log(response.data);
           setPurchaseList([]),
-            setTotalPrice(0),
-            setImgQR("")
+          setTotalPrice(0),
+          setImgQR("")
           setTableNumber("")
-
+          router.push("/dashboard")
         }
       })
       .catch((err) => {
@@ -303,7 +298,7 @@ const HomeID = ({ params }: { params: { id: string } }) => {
               }))) : null} */}
               {PurchaseList.map((item, index) => (
                 <div key={index} className={styles.purchaselist}>
-                  <div style={{ display:"flex", alignItems:"center" }}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     <div style={{ margin: 1 }}>
                       {item.productname}
                     </div>
@@ -312,7 +307,7 @@ const HomeID = ({ params }: { params: { id: string } }) => {
                       {item.quantity}
                     </div>
                   </div>
-                  <div style={{ display:"flex", alignItems:"center" }}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     <span>{item.price}</span>
                     <div>
                       <Button type="text" danger size='small' onClick={() => handledelete(index, Number(item.price), Number(item.quantity))}>
@@ -361,33 +356,37 @@ const HomeID = ({ params }: { params: { id: string } }) => {
                 </Button>
                 : null}
               <div>
-                <h3>Payment Method</h3>
-                <div style={{ display: "flex", justifyContent: "space-around" }}>
-                  <div className={active === "1" ? "active" : ''} key={1} id={'1'} onClick={handleClick} style={{ width: 85, height: 78, paddingTop: 13, marginTop: 20 }}>
-                    <button
-                      key={1}
-                      className={active === "1" ? "active" : ''}
-                      id={'1'}
-                      onClick={handleClick}
-                      style={active === "2" ? { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', filter: "grayscale(1)", backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' } : { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }}
-                    />
-                  </div>
-                  <div className={active === "2" ? "active" : ''} key={2} id={'2'} onClick={handleClick} style={{ width: 85, height: 78, paddingTop: 13, marginTop: 20 }}>
-                    <button
-                      key={2}
-                      className={active === "2" ? "active" : ''}
-                      id={'2'}
-                      onClick={handleClick}
-                      style={active === "1" ? { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', filter: "grayscale(1)", backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 } : { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }}
-                    />
-                  </div>
-                </div>
+                {totalprice
+                  ? <>
+                    <h3>Payment Method</h3>
+                    <div style={{ display: "flex", justifyContent: "space-around" }}>
+                      <div className={active === "1" ? "active" : ''} key={1} id={'1'} onClick={handleClick} style={{ width: 85, height: 78, paddingTop: 13, marginTop: 20 }}>
+                        <button
+                          key={1}
+                          className={active === "1" ? "active" : ''}
+                          id={'1'}
+                          onClick={handleClick}
+                          style={active === "2" ? { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', filter: "grayscale(1)", backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' } : { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/2489/2489357.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }}
+                        />
+                      </div>
+                      <div className={active === "2" ? "active" : ''} key={2} id={'2'} onClick={handleClick} style={{ width: 85, height: 78, paddingTop: 13, marginTop: 20 }}>
+                        <button
+                          key={2}
+                          className={active === "2" ? "active" : ''}
+                          id={'2'}
+                          onClick={handleClick}
+                          style={active === "1" ? { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', filter: "grayscale(1)", backgroundColor: "white", backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", maxWidth: '100%', maxHeight: '100%', width: 50, height: 50 } : { backgroundImage: 'url(https://cdn-icons-png.flaticon.com/512/9692/9692195.png)', backgroundPosition: "center", backgroundSize: "cover", backgroundRepeat: "no-repeat", border: "none", width: 50, height: 50, maxWidth: '100%', maxHeight: '100%' }}
+                        />
+                      </div>
+                    </div>
+                  </>
+                  : null}
                 <Button style={{ marginTop: 10 }} onClick={handlePayment}>Payment</Button>
               </div>
             </div>
           </div>
         </main>
-        <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel} setTableNumber={setTableNumber} />
+        {/* <ModalChangeTable open={modalTable} onOk={handleOk} onCancel={handleCancel} setTableNumber={setTableNumber} /> */}
       </Spin>
     </>
   )
