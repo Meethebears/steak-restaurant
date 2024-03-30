@@ -57,7 +57,7 @@ const Home = () => {
   const pathname = usePathname()
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/product')
+    axios.get('https://node-api-steak-restaurant.vercel.app/api/product')
       .then(response => {
         setProduct(response.data)
       })
