@@ -65,7 +65,6 @@ const valueFormatter = (value: number) => `${value}bath`;
 
 const HorizontalBars = (props : any) => {
     const {totalmonth} = props
-    console.log("result",totalmonth);
     
   return (
     <BarChart

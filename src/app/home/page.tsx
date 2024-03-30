@@ -233,10 +233,6 @@ const Home = () => {
 
   }
 
-  console.log(tableNumber);
-  
-
-
   return (
     <>
       {pathname == "/home" ? <Menu keys={"1"}/> : null}
