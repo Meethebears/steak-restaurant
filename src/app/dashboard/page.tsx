@@ -29,19 +29,19 @@ const Dashboard = () => {
     const TotalMonth: any = []
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/sale_items')
+        axios.get('https://node-api-steak-restaurant.vercel.app/api/sale_items')
             .then(response => {
                 setSaleProduct(response.data)
             })
-        axios.get('http://localhost:5000/api/sale_item/total-sales')
+        axios.get('https://node-api-steak-restaurant.vercel.app/api/sale_item/total-sales')
             .then(response => {
                 setTotalSale(response.data)
             })
-        axios.get('http://localhost:5000/api/sale_item/today-sales')
+        axios.get('https://node-api-steak-restaurant.vercel.app/api/sale_item/today-sales')
             .then(response => {
                 setTodaySale(response.data)
             })
-        axios.get('http://localhost:5000/api/sale_item/month-sales')
+        axios.get('https://node-api-steak-restaurant.vercel.app/api/sale_item/month-sales')
             .then(response => {
                 setMonthSale(response.data)
             })

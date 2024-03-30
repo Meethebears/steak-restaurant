@@ -190,7 +190,7 @@ const Home = () => {
     let data
     data = await axios.post('https://node-api-steak-restaurant.vercel.app/api/sale_items', values)
       .then((response) => {
-        if (response.statusText == "OK") {
+        if (response.status == 200) {
           OpenNotificationWithIcon('success', '')
           console.log(response.data);
           setPurchaseList([]),
@@ -232,6 +232,9 @@ const Home = () => {
     }
 
   }
+
+  console.log(tableNumber);
+  
 
 
   return (

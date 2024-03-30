@@ -61,6 +61,9 @@ const Navbar = (props : any) => {
 
     const {keys} = props
 
+    console.log(keys);
+    
+
     // useEffect(() => {
     //     const CheckUrl = () => {
     //         switch (pathname) {
@@ -86,9 +89,7 @@ const Navbar = (props : any) => {
         setCollapsed(!collapsed);
     }
 
-    const handleMenu = (key: string) => {
-        let keys = key.key
-
+    const handleMenu = () => {
         switch (keys) {
             case "1":
                 router.push('/home')
@@ -114,7 +115,7 @@ const Navbar = (props : any) => {
                 theme="dark"
                 inlineCollapsed={collapsed}
                 items={items}
-                onClick={handleMenu}
+                onClick={() => handleMenu}
             />
         </div>
     );
