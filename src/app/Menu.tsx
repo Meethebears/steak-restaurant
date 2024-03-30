@@ -86,7 +86,7 @@ const Navbar = (props : any) => {
         setCollapsed(!collapsed);
     }
 
-    const handleMenu = (key: string) => {
+    const handleMenu = (key: any) => {
         let keys = key.key
 
         switch (keys) {
