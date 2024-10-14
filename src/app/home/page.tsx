@@ -69,7 +69,7 @@ const Home = () => {
       amount: amount
     }
     return (
-      axios.post('https://node-api-steak-restaurant.vercel.app/api/generateQRcode', value)
+      axios.post('http://localhost:5000/api/generateQRcode', value)
         .then((respones) => {
           setImgQR(respones.data.Result);
         })
@@ -104,7 +104,7 @@ const Home = () => {
     }
 
     let data;
-    data = await axios.post('https://node-api-steak-restaurant.vercel.app/api/sale_items', values)
+    data = await axios.post('http://localhost:5000/api/sale_items', values)
       .then((response) => {
         if (response.statusText == "OK") {
           OpenNotificationWithIcon('success', '')
@@ -144,14 +144,14 @@ const Home = () => {
   const handleSelectProductType = (type: string) => {
     if (type === "All Menu") {
       return (
-        axios.get('https://node-api-steak-restaurant.vercel.app/api/product')
+        axios.get('http://localhost:5000/api/product')
           .then((response) => {
             setProduct(response.data)
           })
       )
     } else {
       return (
-        axios.get(`https://node-api-steak-restaurant.vercel.app/api/product/search/${type.toLowerCase()}`)
+        axios.get(`http://localhost:5000/api/product/search/${type.toLowerCase()}`)
           .then((respones) => {
             setProduct(respones.data)
           })
@@ -188,9 +188,9 @@ const Home = () => {
       tablenumber: tableNumber
     }
     let data
-    data = await axios.post('https://node-api-steak-restaurant.vercel.app/api/sale_items', values)
+    data = await axios.post('http://localhost:5000/api/sale_items', values)
       .then((response) => {
-        if (response.status == 200) {
+        if (response.statusText == "OK") {
           OpenNotificationWithIcon('success', '')
           console.log(response.data);
           setPurchaseList([]),
@@ -232,6 +232,7 @@ const Home = () => {
     }
 
   }
+
 
   return (
     <>

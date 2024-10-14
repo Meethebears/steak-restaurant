@@ -57,7 +57,7 @@ const HomeID = ({ params }: { params: { id: string } }) => {
   const pathname = usePathname()
 
   useEffect(() => {
-    axios.get(`https://node-api-steak-restaurant.vercel.app/api/sale_items/${params.id}`)
+    axios.get(`http://localhost:5000/api/sale_items/${params.id}`)
       .then(response => {
         setDataByID(response.data)
         setPurchaseList(response.data.map((item: any) => (item.order))[0])
@@ -67,7 +67,7 @@ const HomeID = ({ params }: { params: { id: string } }) => {
   }, [])
 
   useEffect(() => {
-    axios.get('https://node-api-steak-restaurant.vercel.app/api/product')
+    axios.get('http://localhost:5000/api/product')
       .then(response => {
         setProduct(response.data)
       })
@@ -79,7 +79,7 @@ const HomeID = ({ params }: { params: { id: string } }) => {
       amount: amount
     }
     return (
-      axios.post('https://node-api-steak-restaurant.vercel.app/api/generateQRcode', value)
+      axios.post('http://localhost:5000/api/generateQRcode', value)
         .then((respones) => {
           setImgQR(respones.data.Result);
         })
@@ -100,7 +100,7 @@ const HomeID = ({ params }: { params: { id: string } }) => {
     }
 
     let data;
-    data = await axios.put(`https://node-api-steak-restaurant.vercel.app/api/sale_items/${params.id}`, values)
+    data = await axios.put(`http://localhost:5000/api/sale_items/${params.id}`, values)
       .then((response) => {
         if (response) {
           console.log(response.data);
@@ -139,14 +139,14 @@ const HomeID = ({ params }: { params: { id: string } }) => {
   const handleSelectProductType = (type: string) => {
     if (type === "All Menu") {
       return (
-        axios.get('https://node-api-steak-restaurant.vercel.app/api/product')
+        axios.get('http://localhost:5000/api/product')
           .then((response) => {
             setProduct(response.data)
           })
       )
     } else {
       return (
-        axios.get(`https://node-api-steak-restaurant.vercel.app/api/product/search/${type.toLowerCase()}`)
+        axios.get(`http://localhost:5000/api/product/search/${type.toLowerCase()}`)
           .then((respones) => {
             setProduct(respones.data)
           })

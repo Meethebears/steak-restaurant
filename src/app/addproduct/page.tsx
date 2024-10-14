@@ -45,7 +45,7 @@ const AddProduct = () => {
         }
 
         let data;
-        data = await axios.post('https://node-api-steak-restaurant.vercel.app/api/product', value)
+        data = await axios.post('http://localhost:5000/api/product', value)
             .then((response) => {
                 if (response.statusText == "OK") {
                     OpenNotificationWithIcon('success', '')
