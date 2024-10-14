@@ -48,6 +48,10 @@ const Navbar = (props: any) => {
     }
 
     const handleMenu = (key: any) => {
+<<<<<<< HEAD
+=======
+        let keys = key.key
+>>>>>>> origin/dev
 
         const keyPage = key.key
 
