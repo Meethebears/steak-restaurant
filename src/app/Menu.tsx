@@ -36,20 +36,6 @@ const items: MenuItem[] = [
     getItem('Addproduct', '2', <ShoppingCartOutlined />),
     getItem('Dashboard', '3', <AreaChartOutlined />),
     getItem('Logout', '4', <LogoutOutlined />),
-
-    // getItem('Navigation One', 'sub1', <MailOutlined />, [
-    //     getItem('Option 5', '5'),
-    //     getItem('Option 6', '6'),
-    //     getItem('Option 7', '7'),
-    //     getItem('Option 8', '8'),
-    // ]),
-
-    // getItem('Navigation Two', 'sub2', <AppstoreOutlined />, [
-    //     getItem('Option 9', '9'),
-    //     getItem('Option 10', '10'),
-
-    //     getItem('Submenu', 'sub3', null, [getItem('Option 11', '11'), getItem('Option 12', '12')]),
-    // ]),
 ];
 
 const Navbar = (props: any) => {
@@ -58,27 +44,6 @@ const Navbar = (props: any) => {
     const [collapsed, setCollapsed] = useState(true)
 
     const { keys } = props
-
-    // useEffect(() => {
-    //     const CheckUrl = () => {
-    //         switch (pathname) {
-    //             case "/home":
-    //                 setPageKey("1")
-    //                 break;
-    //             case "/addproduct":
-    //                 setPageKey("2")
-    //                 break;
-    //             case "/dashboard":
-    //                 setPageKey("3")
-    //                 break;
-    //         }
-    //     }
-
-    //     CheckUrl()
-
-    // }, [pathname]);
-
-
 
     const toggleCollapsed = () => {
         setCollapsed(!collapsed);
