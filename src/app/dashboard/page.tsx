@@ -175,14 +175,14 @@ const Dashboard = () => {
                 <Divider />
                 <div style={{ display: "flex", justifyContent: "space-around" }}>
                     {Array.isArray(saleProduct) ? saleProduct.map((item) => {
-                        return (item.payment === "not paid" ? <Card style={{ width: 185, fontFamily: 'Mitr, sans-serif', cursor: "pointer" }} onClick={() => Payment(item._id)}>
+                        return (item.payment === "not paid" ? <Card key={item._id} style={{ width: 185, fontFamily: 'Mitr, sans-serif', cursor: "pointer" }} onClick={() => Payment(item._id)}>
                             <div style={{ display: "flex", flexDirection: "column" }}>
                                 <div style={{ fontSize: 20, fontWeight: 1000 }}>{item.tablenumber}</div>
                                 <Divider />
                                 <div style={{ fontSize: 16, fontWeight: 600 }}>รายการอาหาร</div>
                                 <div>{(item.order).map((element: any) => {
                                     return (
-                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                        <div key={element._id} style={{ display: "flex", justifyContent: "space-between" }}>
                                             <div style={{ display: "flex" }}>{element.productname}
                                                 <div style={{ color: "#C6C6D1" }}> x{element.quantity}</div>
                                             </div>
