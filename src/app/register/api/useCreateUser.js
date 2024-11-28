@@ -6,7 +6,7 @@ import { useState } from "react";
 const useCreateUser = () => {
   const name = "createuser";
   const API = useAPI(name, 'overlay')
-  const [result, useResult ] = useState();
+  const [result, setResult ] = useState();
   const [loading, setLoading] = useState(false);
   const Createuser = async (body) => {
     try {
@@ -14,7 +14,7 @@ const useCreateUser = () => {
       API.begin();
       const { data } = await API.post(`/register`, body)
       const res = resOK(data)
-      useResult(res)
+      setResult(res)
       message.success(res.message)
       return res
     } catch (error) {
