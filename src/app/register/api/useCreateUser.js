@@ -8,7 +8,7 @@ const useCreateUser = () => {
   const API = useAPI(name, 'overlay')
   const [result, useResult ] = useState();
   const [loading, setLoading] = useState(false);
-  const createuser = async (body) => {
+  const Createuser = async (body) => {
     try {
       setLoading(true);
       API.begin();
@@ -30,7 +30,7 @@ const useCreateUser = () => {
     }
   };
 
-  return [result?.data, loading, createuser];
+  return [result?.data, loading, Createuser];
 };
 
 export default useCreateUser;
