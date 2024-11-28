@@ -1,20 +1,17 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import {
-    AppstoreOutlined,
-    ContainerOutlined,
-    DesktopOutlined,
     HomeOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    PieChartOutlined,
+    LogoutOutlined,
     ShoppingCartOutlined,
     AreaChartOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
-import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
+import { signOut } from "next-auth/react"
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -38,6 +35,7 @@ const items: MenuItem[] = [
     getItem('Home', '1', <HomeOutlined />),
     getItem('Addproduct', '2', <ShoppingCartOutlined />),
     getItem('Dashboard', '3', <AreaChartOutlined />),
+    getItem('Logout', '4', <LogoutOutlined />),
 
     // getItem('Navigation One', 'sub1', <MailOutlined />, [
     //     getItem('Option 5', '5'),
@@ -54,12 +52,12 @@ const items: MenuItem[] = [
     // ]),
 ];
 
-const Navbar = (props : any) => {
+const Navbar = (props: any) => {
     const router = useRouter()
     const pathname = usePathname()
     const [collapsed, setCollapsed] = useState(true)
 
-    const {keys} = props
+    const { keys } = props
 
     // useEffect(() => {
     //     const CheckUrl = () => {
@@ -79,7 +77,7 @@ const Navbar = (props : any) => {
     //     CheckUrl()
 
     // }, [pathname]);
-    
+
 
 
     const toggleCollapsed = () => {
@@ -98,6 +96,9 @@ const Navbar = (props : any) => {
                 break;
             case "3":
                 router.push('/dashboard')
+                break;
+            case "4":
+                signOut({ callbackUrl: '/' });
                 break;
         }
 

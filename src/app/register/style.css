@@ -1,0 +1,8 @@
+.btn_button{
+    color: blue;
+}
+
+.active {
+    background-color: rgb(202 217 252); 
+    border-radius: 10px;
+}
