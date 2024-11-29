@@ -11,7 +11,7 @@ export const authOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials, req) {
-                const apiUrl = config.hostBackend + "api/login";
+                const apiUrl = config.hostBackend + "/login";
                 const res = await fetch(apiUrl, {
                     method: 'POST',
                     body: JSON.stringify(credentials),
