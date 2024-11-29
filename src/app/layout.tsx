@@ -17,7 +17,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // ดึง session จาก getServerSession
   const session = await getServerSession()
   console.log('session', session)
   return (
