@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react'
 import API from '../api'
+import { useSession } from 'next-auth/react'
+// import { getServerSession } from "next-auth/next"
+// import { authOptions } from "../../src/app/lib/nextAuthOptions"
 
 /**
  * @param {string} name ชื่อ API ที่ใช้
@@ -7,6 +10,8 @@ import API from '../api'
  */
 const useAPI = (name, loadType, locale) => {
   // State สำหรับการจัดการสถานะ
+  // const session = getServerSession(authOptions)
+  const { data: session, status } = useSession()
   const [loading, setLoading] = useState(false)
   const [errors, setError] = useState(null)
   const [tokenExpired, setTokenExpired] = useState(false)
@@ -45,7 +50,7 @@ const useAPI = (name, loadType, locale) => {
 
   // สร้าง API client
   const api = API(
-    { token: 'your-user-token' },  // คุณสามารถใช้ token ที่ได้จาก context หรือ prop อื่นๆ
+    { token: session?.user?.id },
     start,
     end,
     error,

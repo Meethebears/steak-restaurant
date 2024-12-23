@@ -2,12 +2,13 @@
 import styles from './page.module.css'
 import type { FormProps } from 'antd';
 import { signIn } from 'next-auth/react';
-import { Button, Checkbox, Form, Input, Card } from "antd";
+import { Button, Checkbox, Form, Input, Card, message } from "antd";
 import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
 
     const router = useRouter()
+    const [messageApi, contextHolder] = message.useMessage()
 
     type FieldType = {
         username?: string;
@@ -26,11 +27,16 @@ const LoginPage = () => {
             })
             if (!result || result.error) {
                 console.error(result?.error || 'Unknown error');
+                messageApi.open({
+                    type: 'error',
+                    content: 'Login failed',
+                });
                 return false;
             }
             router.push('/home')
         } catch (err) {
             console.log(err)
+            alert('Login failed')
         }
     };
 
@@ -39,6 +45,7 @@ const LoginPage = () => {
     };
     return (
         <main className={styles.main}>
+            {contextHolder}
             <Card>
                 <h1>
                     Login Page

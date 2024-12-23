@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import { useSession } from 'next-auth/react'
 import config from '../config'
 
 Axios.defaults.timeout = (1000 * 60) * 3
@@ -10,7 +11,7 @@ export const axios = Axios.create({
 
 class ApiClient {
   constructor(apiEndpoint, userAuth, callBegin, callEnd, callError, locale, onExpire) {
-    this.token = userAuth?.token
+    this.token = userAuth?.accessToken // ใช้ access token จาก session
     this.cancelTokenSource = Axios.CancelToken.source()
     this.axios = Axios.create({
       baseURL: apiEndpoint
@@ -28,7 +29,6 @@ class ApiClient {
       headers: {
         ...access,
         ...options?.headers
-        // lang: this.locale
       },
       cancelToken: this.cancelTokenSource.token
     }
@@ -38,8 +38,7 @@ class ApiClient {
     if (auth && !this.token) {
       throw { error_message: 'ไม่มีสิทธิ' }
     }
-    // return auth ? { Authorization: 'Bearer ' + this.token } : null
-    return auth ? { Authorization: this.token } : null
+    return auth ? { Authorization: `Bearer ${this.token}` } : null
   }
 
   get(url, options = {}) {
@@ -51,7 +50,6 @@ class ApiClient {
         if (reason?.response?.status === 401) {
           this.onExpire()
         }
-
         throw reason
       })
       .finally(() => {
@@ -70,7 +68,6 @@ class ApiClient {
         if (reason?.response?.status === 401) {
           this.onExpire()
         }
-
         throw reason
       })
       .finally(() => {
@@ -89,7 +86,6 @@ class ApiClient {
         if (reason?.response?.status === 401) {
           this.onExpire()
         }
-
         throw reason
       })
       .finally(() => {
@@ -108,7 +104,6 @@ class ApiClient {
         if (reason?.response?.status === 401) {
           this.onExpire()
         }
-
         throw reason
       })
       .finally(() => {
@@ -127,7 +122,6 @@ class ApiClient {
         if (reason?.response?.status === 401) {
           this.onExpire()
         }
-
         throw reason
       })
       .finally(() => {
@@ -138,12 +132,14 @@ class ApiClient {
   }
 }
 
-const useApiClient = (userAuth, callBegin, callEnd, callError, option, onExpire) => (
-  new ApiClient(config.hostBackend, userAuth, callBegin, callEnd, callError, option, onExpire)
-)
+const useApiClient = (callBegin, callEnd, callError, option, onExpire) => {
+  const { data: session } = useSession();  // ใช้ session จาก NextAuth
+  return new ApiClient(config.hostBackend, session?.user, callBegin, callEnd, callError, option, onExpire);
+};
 
-export const useApiService = (userAuth, callBegin, callEnd, callError, option, onExpire) => (
-  new ApiClient(config.host, userAuth, callBegin, callEnd, callError, option, onExpire)
-)
+export const useApiService = (callBegin, callEnd, callError, option, onExpire) => {
+  const { data: session } = useSession();  // ใช้ session จาก NextAuth
+  return new ApiClient(config.host, session?.user, callBegin, callEnd, callError, option, onExpire);
+};
 
-export default useApiClient
+export default useApiClient;

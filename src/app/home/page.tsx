@@ -9,9 +9,13 @@ import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import Menu from "../Menu"
 import Loading from '../component/Loading'
+import useFetchProduct from './api/useFetchProduct'
+import { useSession } from 'next-auth/react'
 
 const Home = () => {
 
+  const [fetchProductResult, LoadingfetchProduct, FetchProduct] = useFetchProduct();
+  const [cssLoaded, setCssLoaded] = useState(false);
   const [product, setProduct] = useState("")
   const [imgQR, setImgQR] = useState("")
   const [totalprice, setTotalPrice] = useState(0)
@@ -26,6 +30,7 @@ const Home = () => {
 
   const domainApiLocal = 'http://localhost:5000/api'
   const domainApiProduction = 'https://node-api-steak-restaurant.vercel.app'
+  const { data: session, status } = useSession()
 
   type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -60,12 +65,40 @@ const Home = () => {
   const router = useRouter()
   const pathname = usePathname()
 
+  const checkCssLoad = () => {
+    const link = document.querySelector('link[rel="stylesheet"]')as HTMLLinkElement;
+    if (link && link.sheet) {
+      setCssLoaded(true); // ถ้าโหลดเสร็จให้ตั้งค่าเป็น true
+    }
+  };
+
+  const CheckSession = async() => {
+    const token = await session
+    if(token){
+      FetchProduct();
+    }
+  }
+
   useEffect(() => {
-    axios.get(`${domainApiProduction}/api/product`)
-      .then(response => {
-        setProduct(response.data)
-      })
-  }, [])
+    
+    checkCssLoad();
+
+    if (fetchProductResult) {
+      setProduct(fetchProductResult);
+    }
+    if (status == 'loading') {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+    // if(status == 'unauthenticated'){
+    //   router.push("/")
+    // }
+  }, [fetchProductResult, status]);
+
+  if (!cssLoaded) {
+    return null;
+  }
 
 
   const generateQRcode = (amount: string) => {
@@ -240,7 +273,7 @@ const Home = () => {
 
   return (
     <>
-      {pathname == "/home" ? <Menu keys={"1"}/> : null}
+      {pathname == "/home" ? <Menu keys={"1"} /> : null}
       <Spin spinning={loading}>
         <main style={{ display: "flex", flexDirection: "column", padding: '3rem', minHeight: '100vh', marginLeft: "30px" }}>
           <div style={{ display: "flex", flexDirection: "row" }}>
@@ -287,7 +320,7 @@ const Home = () => {
               <Divider />
               {PurchaseList.map((item, index) => (
                 <div key={index} className={styles.purchaselist}>
-                  <div style={{ display:"flex", alignItems:"center" }}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     <div style={{ margin: 1 }}>
                       {item.productname}
                     </div>
@@ -296,7 +329,7 @@ const Home = () => {
                       {item.quantity}
                     </div>
                   </div>
-                  <div style={{ display:"flex", alignItems:"center" }}>
+                  <div style={{ display: "flex", alignItems: "center" }}>
                     <span>{item.price}</span>
                     <div>
                       <Button type="text" danger size='small' onClick={() => handledelete(index, Number(item.price), Number(item.quantity))}>

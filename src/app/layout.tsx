@@ -1,7 +1,8 @@
 import './globals.css'
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import { getServerSession } from 'next-auth'
+import { getSession } from "next-auth/react";
 import SessionProvider from './component/SessionProvider' // ใช้ default import
 import Menu from './Menu'
 
@@ -17,14 +18,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // ดึง session จาก getServerSession
-  const session = await getServerSession()
-  console.log('session', session)
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SessionProvider session={session}>
-          {children}
+        <SessionProvider>
+          <Suspense fallback={<div>กำลังโหลด...</div>}>
+            {children}
+          </Suspense>
         </SessionProvider>
       </body>
     </html>

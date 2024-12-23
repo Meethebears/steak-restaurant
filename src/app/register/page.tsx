@@ -19,7 +19,22 @@ const Register = () => {
         remember?: string;
     };
 
+    // const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+    //     try {
+    //         const result = await createUser({username:values.username,password:values.password});
+    //         console.log(result)
+    //         if (result.success) {
+    //             console.log("User created successfully!");
+    //         } else {
+    //             console.log("Error creating user:", result.errorMessage);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error in onFinish:", error);
+    //     }
+    // }
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+
+        
         try {
             const result = await createUser({username:values.username,password:values.password});
             console.log(result)

@@ -5,3 +5,8 @@ module.exports = {
     reactStrictMode: true,
     transpilePackages: ['@mui/x-charts'],
   };
+  module.exports = {
+    experimental: {
+      runtime: 'edge',
+    },
+  }
